@@ -7,7 +7,6 @@
             [clj-time.core :as ct])
   (:gen-class :main true))
 
-
 (defn cards-in-range
   "Returns cards filtered by due date.
    Allows comparison by :after and :before"
@@ -17,14 +16,13 @@
         b (= jo (type before))
         date-comp #(let [d (ctf/parse (:due %))]
                      (match/match
-                      [a b]
+                      [a    b   ]
                       [true true] (ct/within? (ct/interval after before) d)
-                      [_ true] (ct/before? d before)
-                      [true _] (ct/after? d after)))]
+                      [_    true] (ct/before? d before)
+                      [true _   ] (ct/after? d after)))]
     (->> deck
         (filter #(not (nil? (:due %))))
         (filter date-comp))))
-
 
 (defn -main
   "return list of cards due by parameter."
@@ -38,15 +36,15 @@
         boards-by-id (let [b-all (tr/all-boards)]
                        (apply merge
                               (map #(hash-map (keyword (:id %)) %) b-all)))
+
+        start-of-day #(ct/date-time (ct/year %) (ct/month %) (ct/day %))
+
+        end-of-day #(ct/date-time (ct/year %) (ct/month %) (ct/day %) 23 59 59 999)
         cards (tr/get-all :cards)
-        cards-due-today (let [n (ct/now)
-                              start-of-day (ct/date-time (ct/year n) (ct/month n) (ct/day n))
-                              end-of-day (ct/date-time (ct/year n) (ct/month n) (ct/day n) 23 59 59 999)]
-                          (cards-in-range cards :after start-of-day :before end-of-day))
-        cards-due-tomorrow (let [n (ct/plus (ct/now) (ct/days 1))
-                                 start-of-day (ct/date-time (ct/year n) (ct/month n) (ct/day n))
-                                 end-of-day (ct/date-time (ct/year n) (ct/month n) (ct/day n) 23 59 59 999)]
-                             (cards-in-range cards :after start-of-day :before end-of-day))
+        cards-due-today (let [n (ct/now)]
+                          (cards-in-range cards :after (start-of-day n) :before (end-of-day n)))
+        cards-due-tomorrow (let [n (ct/plus (ct/now) (ct/days 1))]
+                             (cards-in-range cards :after (start-of-day n) :before (end-of-day n)))
         cards-overdue (let [n (ct/now)
                             over-due (ct/minus n (ct/minutes 1))]
                         (cards-in-range cards :before over-due))
