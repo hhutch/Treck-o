@@ -1,4 +1,4 @@
-(ns trello-get.core
+(ns treck-o.core
   (:require [trello.core :as tr]
             [trello.util :as tru]
             [clj-time.format :as ctf]

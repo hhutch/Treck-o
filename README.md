@@ -1,12 +1,43 @@
-# trello-get
+# Treck-o
 
-I'm an app. Or maybe I'm a library? I haven't decided yet. 
+Command line utility for querying Trello for common data.
 
-The choice is up to you!
+Currently only has options for querying cards based on due date.
+
+More to come.
+
+## Install
+
+```bash
+lein deps
+lein uberjar
+```
+### Getting KEY and TOKEN for API access
+
+* Public Key: [visit this link while logged in Trello](https://trello.com/1/appKey/generate).
+
+* With these values [visit this other link](https://trello.com/1/connect?key=<PUBLIC_KEY>&name=MyApp&response_type=token) (Replacing, of course &lt;PUBLIC_KEY&gt; for the public key value obtained).
+** If you need read/write access, add the following to the end of the prior URL:  &scope=read,write
+
+* Authorice MyApp to read the application
 
 ## Usage
 
-FIXME
+You need to set ENV variables for your Trello auth key and token. The two environment vars to set are
+
+```bash
+export TRELLO_KEY="mykey"
+export TRELLO_TOKEN="mytoken"
+```
+List overdue cards
+```bash
+java -jar trello-get-0.1.0-SNAPSHOT-standalone.jar -o 
+```
+
+List cards due tomorrow
+```bash
+java -jar trello-get-0.1.0-SNAPSHOT-standalone.jar -T 
+```
 
 ## License
 
