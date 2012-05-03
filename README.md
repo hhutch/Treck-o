@@ -31,6 +31,8 @@ export TRELLO_TOKEN="mytoken"
 
 * Authorice MyApp to read the application
 
+### Running Queries
+
 List overdue cards
 ```bash
 java -jar trello-get-0.1.0-SNAPSHOT-standalone.jar -o 
